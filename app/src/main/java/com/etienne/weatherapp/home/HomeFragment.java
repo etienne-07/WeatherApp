@@ -53,6 +53,10 @@ public class HomeFragment extends Fragment implements HomeViewModel.Callback {
 
     @Override
     public void addNewLocation() {
-
+        getActivity().getSupportFragmentManager()
+                .beginTransaction()
+                .replace(R.id.container, new MapFragment())
+                .addToBackStack(null)
+                .commit();
     }
 }
