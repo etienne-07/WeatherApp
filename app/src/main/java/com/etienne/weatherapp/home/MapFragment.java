@@ -4,7 +4,6 @@ import android.os.Bundle;
 import android.support.annotation.NonNull;
 import android.support.annotation.Nullable;
 import android.support.v4.app.Fragment;
-import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.Menu;
 import android.view.MenuInflater;
@@ -14,6 +13,7 @@ import android.view.ViewGroup;
 import android.widget.Toast;
 
 import com.etienne.weatherapp.R;
+import com.etienne.weatherapp.city.CityFragment;
 import com.google.android.gms.maps.GoogleMap;
 import com.google.android.gms.maps.MapView;
 import com.google.android.gms.maps.OnMapReadyCallback;
@@ -61,11 +61,19 @@ public class MapFragment extends Fragment implements OnMapReadyCallback, GoogleM
                 if (currentPosition == null) {
                     Toast.makeText(getContext(), R.string.add_marker_warning, Toast.LENGTH_SHORT).show();
                 } else {
-                    Log.e("TEST", " test");
+                    goToCityScreen();
                 }
                 return true;
         }
         return false;
+    }
+
+    private void goToCityScreen() {
+        Fragment cityFragment = CityFragment.newInstance(true, currentPosition.latitude, currentPosition.longitude);
+        getActivity().getSupportFragmentManager()
+                .beginTransaction()
+                .replace(R.id.container, cityFragment)
+                .commit();
     }
 
     @Override
