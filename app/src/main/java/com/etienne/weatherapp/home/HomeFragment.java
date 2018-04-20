@@ -13,6 +13,7 @@ import android.view.ViewGroup;
 
 import com.etienne.weatherapp.R;
 import com.etienne.weatherapp.databinding.FragmentHomeBinding;
+import com.etienne.weatherapp.repository.SharedPreferencesUtility;
 
 public class HomeFragment extends Fragment implements HomeViewModel.Callback {
 
@@ -29,7 +30,7 @@ public class HomeFragment extends Fragment implements HomeViewModel.Callback {
     public View onCreateView(LayoutInflater inflater, ViewGroup container,
                              Bundle savedInstanceState) {
         FragmentHomeBinding binding = DataBindingUtil.inflate(inflater, R.layout.fragment_home, container, false);
-        viewModel = new HomeViewModel(this);
+        viewModel = new HomeViewModel(this, new SharedPreferencesUtility(getContext()));
         binding.setViewModel(viewModel);
         return binding.getRoot();
     }

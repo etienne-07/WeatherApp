@@ -11,6 +11,7 @@ import android.widget.Toast;
 
 import com.etienne.weatherapp.R;
 import com.etienne.weatherapp.databinding.FragmentCityBinding;
+import com.etienne.weatherapp.repository.SharedPreferencesUtility;
 
 public class CityFragment extends Fragment implements CityViewModel.Callback {
     private static final String KEY_IS_NEW_LOCATION = "isNewLocation";
@@ -38,7 +39,7 @@ public class CityFragment extends Fragment implements CityViewModel.Callback {
                              Bundle savedInstanceState) {
         readBundle(getArguments());
         FragmentCityBinding binding = DataBindingUtil.inflate(inflater, R.layout.fragment_city, container, false);
-        viewModel = new CityViewModel(isNewLocation, latitude, longitude, this);
+        viewModel = new CityViewModel(isNewLocation, latitude, longitude, this, new SharedPreferencesUtility(getContext()));
         binding.setViewModel(viewModel);
         return binding.getRoot();
     }

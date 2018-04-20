@@ -3,8 +3,10 @@ package com.etienne.weatherapp.city;
 import android.databinding.ObservableField;
 import android.support.annotation.NonNull;
 
+import com.etienne.weatherapp.model.BookmarkedLocation;
 import com.etienne.weatherapp.model.Forecast;
 import com.etienne.weatherapp.network.DownloadWeatherData;
+import com.etienne.weatherapp.repository.SharedPreferencesUtility;
 
 public class CityViewModel implements DownloadWeatherData.Callback {
 
@@ -22,11 +24,12 @@ public class CityViewModel implements DownloadWeatherData.Callback {
     @NonNull
     private final Callback callback;
     @NonNull
+    private final SharedPreferencesUtility sharedPreferencesUtility;
     public ObservableField<String> temperature;
     public ObservableField<String> humidity;
     public ObservableField<String> rain;
 
-    CityViewModel(boolean isNewLocation, double latitude, double longitude, @NonNull Callback callback) {
+    CityViewModel(boolean isNewLocation, double latitude, double longitude, @NonNull Callback callback, @NonNull SharedPreferencesUtility sharedPreferencesUtility) {
         this.isNewLocation = isNewLocation;
         this.latitude = latitude;
         this.longitude = longitude;
@@ -35,6 +38,7 @@ public class CityViewModel implements DownloadWeatherData.Callback {
         this.temperature = new ObservableField<>(DEFAULT_PLACEHOLDER);
         this.humidity = new ObservableField<>(DEFAULT_PLACEHOLDER);
         this.rain = new ObservableField<>(DEFAULT_PLACEHOLDER);
+        this.sharedPreferencesUtility = sharedPreferencesUtility;
     }
 
     void downloadForecast() {
@@ -48,10 +52,19 @@ public class CityViewModel implements DownloadWeatherData.Callback {
         if (forecast.getRain() != null) {
             this.rain.set(String.valueOf(forecast.getRain().get3h()));
         }
+
+        if (isNewLocation) {
+            saveNewLocation(forecast.getName());
+        }
     }
 
     @Override
     public void onWeatherForecastRequestError() {
         callback.showErrorMessage();
+    }
+
+    private void saveNewLocation(@NonNull String name) {
+        final BookmarkedLocation location = new BookmarkedLocation(latitude, longitude, name);
+        sharedPreferencesUtility.saveLocation(location);
     }
 }
