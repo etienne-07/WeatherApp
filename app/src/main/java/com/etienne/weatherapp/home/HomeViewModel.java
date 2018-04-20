@@ -4,7 +4,10 @@ import android.databinding.ObservableInt;
 import android.support.annotation.NonNull;
 import android.view.View;
 
+import com.etienne.weatherapp.model.BookmarkedLocation;
 import com.etienne.weatherapp.repository.SharedPreferencesUtility;
+
+import java.util.List;
 
 public class HomeViewModel {
 
@@ -13,7 +16,7 @@ public class HomeViewModel {
     @NonNull
     public final ObservableInt emptyBookmarksContainerVisibility;
     @NonNull
-    private final SharedPreferencesUtility sharedPreferencesUtility;
+    public final List<BookmarkedLocation> bookmarkedLocations;
 
     interface Callback {
         void addNewLocation();
@@ -21,12 +24,15 @@ public class HomeViewModel {
 
     HomeViewModel(@NonNull final Callback callback, @NonNull final SharedPreferencesUtility sharedPreferencesUtility) {
         this.callback = callback;
-        this.emptyBookmarksContainerVisibility = new ObservableInt(View.VISIBLE);
-        this.sharedPreferencesUtility = sharedPreferencesUtility;
-        sharedPreferencesUtility.fetchBookmarkedLocations();
+        this.bookmarkedLocations = sharedPreferencesUtility.fetchBookmarkedLocations();
+        this.emptyBookmarksContainerVisibility = new ObservableInt(getEmptyContainerVisibility());
     }
 
     public void onAddLocationButtonClicked() {
         callback.addNewLocation();
+    }
+
+    private int getEmptyContainerVisibility() {
+        return bookmarkedLocations.size() > 0 ? View.GONE : View.VISIBLE;
     }
 }
