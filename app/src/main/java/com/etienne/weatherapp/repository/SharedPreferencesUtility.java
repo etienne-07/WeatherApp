@@ -30,8 +30,7 @@ public class SharedPreferencesUtility {
         final SharedPreferences.Editor editor = sharedPreferences.edit();
         final List<BookmarkedLocation> bookmarkedLocations = fetchBookmarkedLocations();
         bookmarkedLocations.add(location);
-        editor.putString(BOOKMARKED_LOCATION, gson.toJson(bookmarkedLocations));
-        editor.commit();
+        saveBookmarkedLocationString(editor, bookmarkedLocations);
     }
 
     public List<BookmarkedLocation> fetchBookmarkedLocations() {
@@ -42,5 +41,22 @@ public class SharedPreferencesUtility {
         Type type = new TypeToken<List<BookmarkedLocation>>() {
         }.getType();
         return gson.fromJson(jsonLocations, type);
+    }
+
+    public boolean deleteLocation(@NonNull final BookmarkedLocation location) {
+        final SharedPreferences.Editor editor = sharedPreferences.edit();
+        final List<BookmarkedLocation> bookmarkedLocations = fetchBookmarkedLocations();
+        final int position = bookmarkedLocations.indexOf(location);
+        if (position > -1) {
+            bookmarkedLocations.remove(position);
+            saveBookmarkedLocationString(editor, bookmarkedLocations);
+            return true;
+        }
+        return false;
+    }
+
+    private void saveBookmarkedLocationString(SharedPreferences.Editor editor, List<BookmarkedLocation> bookmarkedLocations) {
+        editor.putString(BOOKMARKED_LOCATION, gson.toJson(bookmarkedLocations));
+        editor.commit();
     }
 }

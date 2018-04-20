@@ -11,19 +11,41 @@ import java.util.List;
 
 public class HomeViewModel {
 
+    interface Callback {
+        void addNewLocation();
+
+        void removeLocation(@NonNull BookmarkedLocation bookmarkedLocation);
+
+        void goToCityScreen(@NonNull BookmarkedLocation bookmarkedLocation);
+    }
+
     @NonNull
     private final Callback callback;
     @NonNull
     public final ObservableInt emptyBookmarksContainerVisibility;
     @NonNull
     public final List<BookmarkedLocation> bookmarkedLocations;
+    @NonNull
+    final SharedPreferencesUtility sharedPreferencesUtility;
+    @NonNull
+    public final BookmarkedLocationAdapter.Listener listener = new BookmarkedLocationAdapter.Listener() {
+        @Override
+        public void onBookmarkClicked(@NonNull BookmarkedLocation bookmarkedLocation) {
+            callback.goToCityScreen(bookmarkedLocation);
+        }
 
-    interface Callback {
-        void addNewLocation();
-    }
+        @Override
+        public void onDeleteBookmark(@NonNull BookmarkedLocation bookmarkedLocation) {
+            final boolean succeed = sharedPreferencesUtility.deleteLocation(bookmarkedLocation);
+            if (succeed) {
+                callback.removeLocation(bookmarkedLocation);
+            }
+        }
+    };
 
     HomeViewModel(@NonNull final Callback callback, @NonNull final SharedPreferencesUtility sharedPreferencesUtility) {
         this.callback = callback;
+        this.sharedPreferencesUtility = sharedPreferencesUtility;
         this.bookmarkedLocations = sharedPreferencesUtility.fetchBookmarkedLocations();
         this.emptyBookmarksContainerVisibility = new ObservableInt(getEmptyContainerVisibility());
     }

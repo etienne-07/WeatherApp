@@ -12,10 +12,11 @@ import java.util.List;
 
 public class HomeCustomBinding {
 
-    @BindingAdapter("adapter")
-    public static void setAdapter(RecyclerView recyclerView, List<BookmarkedLocation> bookmarkedLocations) {
+    @BindingAdapter({"adapter", "listener"})
+    public static void setAdapter(RecyclerView recyclerView, List<BookmarkedLocation> bookmarkedLocations, BookmarkedLocationAdapter.Listener listener) {
         final Context context = recyclerView.getContext();
         BookmarkedLocationAdapter bookmarkedLocationAdapter = new BookmarkedLocationAdapter(bookmarkedLocations);
+        bookmarkedLocationAdapter.setListener(listener);
         DividerItemDecoration itemDecoration = new DividerItemDecoration(context, DividerItemDecoration.VERTICAL);
         recyclerView.setLayoutManager(new LinearLayoutManager(recyclerView.getContext(), LinearLayoutManager.VERTICAL, false));
         recyclerView.setAdapter(bookmarkedLocationAdapter);
