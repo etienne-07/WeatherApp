@@ -7,11 +7,12 @@ import android.support.v4.app.Fragment;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
+import android.widget.Toast;
 
 import com.etienne.weatherapp.R;
 import com.etienne.weatherapp.databinding.FragmentCityBinding;
 
-public class CityFragment extends Fragment {
+public class CityFragment extends Fragment implements CityViewModel.Callback {
     private static final String KEY_IS_NEW_LOCATION = "isNewLocation";
     private static final String KEY_LATITUDE = "latitude";
     private static final String KEY_LONGITUDE = "longitude";
@@ -37,9 +38,17 @@ public class CityFragment extends Fragment {
                              Bundle savedInstanceState) {
         readBundle(getArguments());
         FragmentCityBinding binding = DataBindingUtil.inflate(inflater, R.layout.fragment_city, container, false);
-        viewModel = new CityViewModel();
+        viewModel = new CityViewModel(isNewLocation, latitude, longitude, this);
         binding.setViewModel(viewModel);
         return binding.getRoot();
+    }
+
+    @Override
+    public void onStart() {
+        super.onStart();
+        if (viewModel != null) {
+            viewModel.downloadForecast();
+        }
     }
 
     private void readBundle(Bundle bundle) {
@@ -51,7 +60,12 @@ public class CityFragment extends Fragment {
             latitude = bundle.getDouble(KEY_LATITUDE);
             longitude = bundle.getDouble(KEY_LONGITUDE);
         } else {
-            throw new IllegalArgumentException("CityFragment must be implemented with the factory method");
+            throw new IllegalArgumentException("CityFragment must be created with the factory method");
         }
+    }
+
+    @Override
+    public void showErrorMessage() {
+        Toast.makeText(getContext(), "Forecast could not loaded, please try again", Toast.LENGTH_LONG).show();
     }
 }
