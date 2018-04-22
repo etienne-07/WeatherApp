@@ -5,6 +5,7 @@ import android.support.annotation.NonNull;
 import android.support.annotation.Nullable;
 import android.util.Log;
 
+import com.etienne.weatherapp.BuildConfig;
 import com.etienne.weatherapp.model.Forecast;
 import com.google.gson.Gson;
 import com.google.gson.JsonIOException;
@@ -23,7 +24,7 @@ import javax.net.ssl.HttpsURLConnection;
 public class DownloadWeatherData extends AsyncTask<Double, Void, Forecast> {
 
     private static final String TAG = DownloadWeatherData.class.getName();
-    private static final String API_URL = "https://api.openweathermap.org/data/2.5/weather?lat=%f&lon=%f&appid=c6e381d8c7ff98f0fee43775817cf6ad&units=metric";
+    private static final String API_URL = "https://api.openweathermap.org/data/2.5/weather?lat=%f&lon=%f&appid=%s&units=metric";
 
     public interface Callback {
         void onWeatherForecastReceived(@NonNull Forecast forecast);
@@ -44,7 +45,7 @@ public class DownloadWeatherData extends AsyncTask<Double, Void, Forecast> {
             final double latitude = params[0];
             final double longitude = params[1];
             try {
-                final URL url = new URL(String.format(API_URL, latitude, longitude));
+                final URL url = new URL(String.format(API_URL, latitude, longitude, BuildConfig.OPEN_WEATHER_API_KEY));
                 return fetch(url);
             } catch (MalformedURLException e) {
                 e.printStackTrace();
