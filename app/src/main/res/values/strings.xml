@@ -1,7 +1,8 @@
 <resources>
     <string name="app_name">WeatherApp</string>
     <string name="add">Add</string>
-    <string name="empty_bookmarks">Empty bookmarks, please add some</string>
+    <string name="help">Help</string>
+    <string name="empty_bookmarks">Empty bookmarks, you can add new location by clicking on the Add button at the top right corner of your screen</string>
     <string name="add_marker_warning">Please add a marker on the map</string>
     <string name="temperature">Temperature:</string>
     <string name="humidity">Humidity:</string>
