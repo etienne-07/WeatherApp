@@ -12,27 +12,92 @@
 
     <android.support.constraint.ConstraintLayout
         android:layout_width="match_parent"
-        android:layout_height="wrap_content"
-        android:padding="@dimen/grid_double">
+        android:layout_height="match_parent">
+
+        <LinearLayout
+            android:layout_width="match_parent"
+            android:layout_height="match_parent"
+            android:background="@color/spinnerBackgroundColor"
+            android:gravity="center"
+            android:visibility="@{viewModel.spinnerVisibility}">
+
+            <ProgressBar
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content" />
+        </LinearLayout>
+
+        <TextView
+            android:id="@+id/name"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:gravity="center"
+            android:text="@{viewModel.name}"
+            android:textStyle="bold"
+            tools:text="Location name" />
 
         <LinearLayout
             android:id="@+id/temperature_container"
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
-            android:orientation="horizontal">
+            android:orientation="vertical"
+            android:padding="@dimen/grid_double"
+            app:layout_constraintTop_toBottomOf="@+id/name">
 
-            <TextView
-                android:layout_width="0dp"
+            <LinearLayout
+                android:layout_width="match_parent"
                 android:layout_height="wrap_content"
-                android:layout_weight="1"
-                android:text="@string/temperature" />
+                android:orientation="horizontal">
 
-            <TextView
-                android:layout_width="wrap_content"
+                <TextView
+                    android:layout_width="0dp"
+                    android:layout_height="wrap_content"
+                    android:layout_weight="1"
+                    android:text="@string/temperature" />
+
+                <TextView
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:text="@{viewModel.temperature}"
+                    android:textStyle="bold"
+                    tools:text="30" />
+            </LinearLayout>
+
+            <LinearLayout
+                android:layout_width="match_parent"
                 android:layout_height="wrap_content"
-                android:text="@{viewModel.temperature}"
-                android:textStyle="bold"
-                tools:text="30" />
+                android:orientation="horizontal">
+
+                <TextView
+                    android:layout_width="0dp"
+                    android:layout_height="wrap_content"
+                    android:layout_weight="1"
+                    android:text="@string/temperature_min" />
+
+                <TextView
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:text="@{viewModel.temperatureMin}"
+                    tools:text="30" />
+            </LinearLayout>
+
+            <LinearLayout
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:orientation="horizontal">
+
+                <TextView
+                    android:layout_width="0dp"
+                    android:layout_height="wrap_content"
+                    android:layout_weight="1"
+                    android:text="@string/temperature_max" />
+
+                <TextView
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:text="@{viewModel.temperatureMax}"
+                    tools:text="30" />
+            </LinearLayout>
+
         </LinearLayout>
 
         <LinearLayout
@@ -40,6 +105,7 @@
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
             android:orientation="horizontal"
+            android:padding="@dimen/grid_double"
             app:layout_constraintTop_toBottomOf="@+id/temperature_container">
 
             <TextView
@@ -57,10 +123,33 @@
         </LinearLayout>
 
         <LinearLayout
+            android:id="@+id/wind_container"
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
             android:orientation="horizontal"
+            android:padding="@dimen/grid_double"
             app:layout_constraintTop_toBottomOf="@+id/humidity_container">
+
+            <TextView
+                android:layout_width="0dp"
+                android:layout_height="wrap_content"
+                android:layout_weight="1"
+                android:text="@string/wind" />
+
+            <TextView
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:text="@{viewModel.wind}"
+                android:textStyle="bold"
+                tools:text="30" />
+        </LinearLayout>
+
+        <LinearLayout
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:orientation="horizontal"
+            android:padding="@dimen/grid_double"
+            app:layout_constraintTop_toBottomOf="@+id/wind_container">
 
             <TextView
                 android:layout_width="0dp"

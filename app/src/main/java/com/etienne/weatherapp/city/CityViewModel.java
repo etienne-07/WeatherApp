@@ -25,9 +25,13 @@ public class CityViewModel implements DownloadWeatherData.Callback {
     private final Callback callback;
     @NonNull
     private final SharedPreferencesUtility sharedPreferencesUtility;
+    public ObservableField<String> name;
     public ObservableField<String> temperature;
+    public ObservableField<String> temperatureMin;
+    public ObservableField<String> temperatureMax;
     public ObservableField<String> humidity;
     public ObservableField<String> rain;
+    public ObservableField<String> wind;
     public ObservableInt spinnerVisibility;
 
     CityViewModel(boolean isNewLocation, double latitude, double longitude, @NonNull Callback callback, @NonNull SharedPreferencesUtility sharedPreferencesUtility) {
@@ -35,9 +39,13 @@ public class CityViewModel implements DownloadWeatherData.Callback {
         this.latitude = latitude;
         this.longitude = longitude;
         this.callback = callback;
+        this.name = new ObservableField<>(DEFAULT_PLACEHOLDER);
         this.temperature = new ObservableField<>(DEFAULT_PLACEHOLDER);
+        this.temperatureMin = new ObservableField<>(DEFAULT_PLACEHOLDER);
+        this.temperatureMax = new ObservableField<>(DEFAULT_PLACEHOLDER);
         this.humidity = new ObservableField<>(DEFAULT_PLACEHOLDER);
         this.rain = new ObservableField<>(DEFAULT_PLACEHOLDER);
+        this.wind = new ObservableField<>(DEFAULT_PLACEHOLDER);
         this.sharedPreferencesUtility = sharedPreferencesUtility;
         this.spinnerVisibility = new ObservableInt(View.VISIBLE);
     }
@@ -49,8 +57,12 @@ public class CityViewModel implements DownloadWeatherData.Callback {
     @Override
     public void onWeatherForecastReceived(@NonNull Forecast forecast) {
         this.spinnerVisibility.set(View.GONE);
+        this.name.set(forecast.getName());
         this.temperature.set(String.valueOf(forecast.getMain().getTemp()));
+        this.temperatureMin.set(String.valueOf(forecast.getMain().getTempMin()));
+        this.temperatureMax.set(String.valueOf(forecast.getMain().getTempMax()));
         this.humidity.set(String.valueOf(forecast.getMain().getHumidity()));
+        this.wind.set(String.valueOf(forecast.getWind().getSpeed()));
         if (forecast.getRain() != null) {
             this.rain.set(String.valueOf(forecast.getRain().get3h()));
         }

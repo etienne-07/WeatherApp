@@ -70,7 +70,7 @@ public class MapFragment extends Fragment implements OnMapReadyCallback, GoogleM
     private void goToCityScreen() {
         new SharedPreferencesUtility(getContext()).saveLocation(new BookmarkedLocation(currentPosition.latitude, currentPosition.longitude, ""));
         getActivity().getSupportFragmentManager().popBackStack();
-        final Fragment fragment = CityFragment.newInstance(false, currentPosition.latitude, currentPosition.longitude);
+        final Fragment fragment = CityFragment.newInstance(true, currentPosition.latitude, currentPosition.longitude);
         getActivity().getSupportFragmentManager()
                 .beginTransaction()
                 .replace(R.id.container, fragment)

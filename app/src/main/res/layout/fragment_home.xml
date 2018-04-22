@@ -15,27 +15,13 @@
         android:layout_height="match_parent"
         tools:context=".home.HomeFragment">
 
-        <LinearLayout
+        <TextView
             android:layout_width="match_parent"
-            android:layout_height="wrap_content"
-            android:layout_gravity="center"
+            android:layout_height="match_parent"
             android:gravity="center"
-            android:orientation="vertical"
             android:padding="@dimen/grid_double"
-            android:visibility="@{viewModel.emptyBookmarksContainerVisibility}">
-
-            <TextView
-                android:layout_width="wrap_content"
-                android:layout_height="match_parent"
-                android:text="@string/empty_bookmarks" />
-
-            <Button
-                android:layout_width="wrap_content"
-                android:layout_height="wrap_content"
-                android:layout_marginTop="@dimen/grid"
-                android:onClick="@{() -> viewModel.onAddLocationButtonClicked()}"
-                android:text="@string/add" />
-        </LinearLayout>
+            android:text="@string/empty_bookmarks"
+            android:visibility="@{viewModel.emptyBookmarksContainerVisibility}" />
 
         <android.support.v7.widget.RecyclerView
             android:id="@+id/recycler_view"
