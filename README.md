@@ -1,4 +1,4 @@
-#Test Assignment
+# Test Assignment
 
 I have completed this test assignment in more or less 9 / 10 hours.
 I have used MVVM architecture with DataBinding.
