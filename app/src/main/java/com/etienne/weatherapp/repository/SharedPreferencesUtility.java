@@ -29,7 +29,12 @@ public class SharedPreferencesUtility {
     public void saveLocation(@NonNull final BookmarkedLocation location) {
         final SharedPreferences.Editor editor = sharedPreferences.edit();
         final List<BookmarkedLocation> bookmarkedLocations = fetchBookmarkedLocations();
-        bookmarkedLocations.add(location);
+        final int position = bookmarkedLocations.indexOf(location);
+        if (position > -1) {
+            bookmarkedLocations.set(position, location);
+        } else {
+            bookmarkedLocations.add(location);
+        }
         saveBookmarkedLocationString(editor, bookmarkedLocations);
     }
 

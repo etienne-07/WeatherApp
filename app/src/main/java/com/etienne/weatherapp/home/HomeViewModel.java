@@ -12,8 +12,6 @@ import java.util.List;
 public class HomeViewModel {
 
     interface Callback {
-        void addNewLocation();
-
         void removeLocation(@NonNull BookmarkedLocation bookmarkedLocation);
 
         void goToCityScreen(@NonNull BookmarkedLocation bookmarkedLocation);
@@ -48,10 +46,6 @@ public class HomeViewModel {
         this.sharedPreferencesUtility = sharedPreferencesUtility;
         this.bookmarkedLocations = sharedPreferencesUtility.fetchBookmarkedLocations();
         this.emptyBookmarksContainerVisibility = new ObservableInt(getEmptyContainerVisibility());
-    }
-
-    public void onAddLocationButtonClicked() {
-        callback.addNewLocation();
     }
 
     private int getEmptyContainerVisibility() {

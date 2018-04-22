@@ -12,30 +12,27 @@ import android.view.MenuItem;
 import android.view.View;
 import android.view.ViewGroup;
 
+import com.etienne.weatherapp.MainActivity;
 import com.etienne.weatherapp.R;
 import com.etienne.weatherapp.city.CityFragment;
 import com.etienne.weatherapp.databinding.FragmentHomeBinding;
+import com.etienne.weatherapp.help.HelpFragment;
 import com.etienne.weatherapp.model.BookmarkedLocation;
 import com.etienne.weatherapp.repository.SharedPreferencesUtility;
 
 public class HomeFragment extends Fragment implements HomeViewModel.Callback {
 
     @Nullable
-    private HomeViewModel viewModel;
-    @Nullable
     private FragmentHomeBinding binding;
-
-    @Override
-    public void onCreate(@Nullable Bundle savedInstanceState) {
-        super.onCreate(savedInstanceState);
-        setHasOptionsMenu(true);
-    }
 
     @Override
     public View onCreateView(LayoutInflater inflater, ViewGroup container,
                              Bundle savedInstanceState) {
+        ((MainActivity) getActivity()).enableBackButton(false);
+        setHasOptionsMenu(true);
         binding = DataBindingUtil.inflate(inflater, R.layout.fragment_home, container, false);
-        viewModel = new HomeViewModel(this, new SharedPreferencesUtility(getContext()));
+        HomeViewModel viewModel = new HomeViewModel(this, new SharedPreferencesUtility(getContext()));
+        assert binding != null;
         binding.setViewModel(viewModel);
         return binding.getRoot();
     }
@@ -51,29 +48,29 @@ public class HomeFragment extends Fragment implements HomeViewModel.Callback {
         int id = item.getItemId();
         switch (id) {
             case R.id.action_add:
-                addNewLocation();
+                replaceFragment(new MapFragment());
+                return true;
+            case R.id.action_help:
+                replaceFragment(new HelpFragment());
                 return true;
         }
         return false;
     }
 
     @Override
-    public void addNewLocation() {
-        getActivity().getSupportFragmentManager()
-                .beginTransaction()
-                .replace(R.id.container, new MapFragment())
-                .addToBackStack(null)
-                .commit();
-    }
-
-    @Override
     public void removeLocation(@NonNull BookmarkedLocation bookmarkedLocation) {
-        ((BookmarkedLocationAdapter) binding.recyclerView.getAdapter()).removeItem(bookmarkedLocation);
+        if (binding != null) {
+            ((BookmarkedLocationAdapter) binding.recyclerView.getAdapter()).removeItem(bookmarkedLocation);
+        }
     }
 
     @Override
     public void goToCityScreen(@NonNull BookmarkedLocation bookmarkedLocation) {
         final Fragment fragment = CityFragment.newInstance(false, bookmarkedLocation.getLatitude(), bookmarkedLocation.getLongitude());
+        replaceFragment(fragment);
+    }
+
+    private void replaceFragment(@NonNull Fragment fragment) {
         getActivity().getSupportFragmentManager()
                 .beginTransaction()
                 .replace(R.id.container, fragment)

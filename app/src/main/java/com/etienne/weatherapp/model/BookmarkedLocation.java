@@ -24,7 +24,7 @@ public class BookmarkedLocation {
 
         if (Double.compare(that.latitude, latitude) != 0) return false;
         if (Double.compare(that.longitude, longitude) != 0) return false;
-        return name.equals(that.name);
+        return true;
     }
 
     @Override

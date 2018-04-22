@@ -12,8 +12,11 @@ import android.view.View;
 import android.view.ViewGroup;
 import android.widget.Toast;
 
+import com.etienne.weatherapp.MainActivity;
 import com.etienne.weatherapp.R;
 import com.etienne.weatherapp.city.CityFragment;
+import com.etienne.weatherapp.model.BookmarkedLocation;
+import com.etienne.weatherapp.repository.SharedPreferencesUtility;
 import com.google.android.gms.maps.GoogleMap;
 import com.google.android.gms.maps.MapView;
 import com.google.android.gms.maps.OnMapReadyCallback;
@@ -31,15 +34,11 @@ public class MapFragment extends Fragment implements OnMapReadyCallback, GoogleM
     @Nullable
     private LatLng currentPosition;
 
-    @Override
-    public void onCreate(@Nullable Bundle savedInstanceState) {
-        super.onCreate(savedInstanceState);
-        setHasOptionsMenu(true);
-    }
-
     @Nullable
     @Override
     public View onCreateView(@NonNull LayoutInflater inflater, @Nullable ViewGroup container, @Nullable Bundle savedInstanceState) {
+        setHasOptionsMenu(true);
+        ((MainActivity) getActivity()).enableBackButton(true);
         View view = inflater.inflate(R.layout.fragment_map, container, false);
         mapView = view.findViewById(R.id.mapView);
         mapView.onCreate(savedInstanceState);
@@ -49,7 +48,7 @@ public class MapFragment extends Fragment implements OnMapReadyCallback, GoogleM
 
     @Override
     public void onCreateOptionsMenu(Menu menu, MenuInflater inflater) {
-        inflater.inflate(R.menu.home_menu, menu);
+        inflater.inflate(R.menu.map_menu, menu);
         super.onCreateOptionsMenu(menu, inflater);
     }
 
@@ -69,10 +68,13 @@ public class MapFragment extends Fragment implements OnMapReadyCallback, GoogleM
     }
 
     private void goToCityScreen() {
-        Fragment cityFragment = CityFragment.newInstance(true, currentPosition.latitude, currentPosition.longitude);
+        new SharedPreferencesUtility(getContext()).saveLocation(new BookmarkedLocation(currentPosition.latitude, currentPosition.longitude, ""));
+        getActivity().getSupportFragmentManager().popBackStack();
+        final Fragment fragment = CityFragment.newInstance(false, currentPosition.latitude, currentPosition.longitude);
         getActivity().getSupportFragmentManager()
                 .beginTransaction()
-                .replace(R.id.container, cityFragment)
+                .replace(R.id.container, fragment)
+                .addToBackStack(null)
                 .commit();
     }
 
